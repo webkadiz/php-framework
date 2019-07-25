@@ -69,9 +69,6 @@ class View extends PL {
 	}
 
 	function render() {
-
-		// self::setViewPath();
-		// self::setLayoutPath();
 		// self::setAssets('css');
 		// self::setAssets('js');
 
@@ -94,5 +91,18 @@ class View extends PL {
 
 		return $page;
 
+	}
+
+	function renderPartial() {
+		
+		$view = $this->controller->getViewPath();
+
+		if(!is_file($view)) throw new FileException($view);
+
+		ob_start();
+		require_once $view;
+		$page = ob_get_clean();
+
+		return $page;
 	}
 }

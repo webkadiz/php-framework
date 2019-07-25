@@ -1,7 +1,7 @@
 <?php
+echo 123;
 
-
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../framework/vendor/autoload.php';
 require_once __DIR__ . '/../framework/bootstrap.php';
 
 

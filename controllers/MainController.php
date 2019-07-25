@@ -8,7 +8,6 @@ class MainController extends Controller {
 
 
 	public function indexAction() {
-
 		$this->render('main/index', [
 			'set' => 'Hello wolrd',
 			'test' => 123,

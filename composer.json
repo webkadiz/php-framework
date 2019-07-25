@@ -8,8 +8,5 @@
             "email": "webkadiz@gmail.com"
         }
     ],
-    "require": {},
-    "autoload": {
-        "psr-4": {"pl\\": "framework", "": "framework/modules"}
-    }
+    "require": {}
 }

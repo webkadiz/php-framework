@@ -15,7 +15,7 @@ class Controller {
 		
 		$controllerName = Router::getControllerName();
 		$controllerPath = PL_CONTROLLER_DIR . $controllerName . '.php';
-		
+
 		if($controllerName) {
 			if(is_file($controllerPath)) {
 				require_once $controllerPath;
@@ -98,19 +98,29 @@ class Controller {
 			$this->setViewPath($view);
 
 			$this->getView()->set($vars);
-			echo $this->getView()->render();
-		}
 
-		elseif(is_array($view)) {
+			echo $this->getView()->render();
+		} elseif(is_array($view)) {
 			$this->getView()->set($view);
 			$this->getView()->render();
-		}
-
-		else {
-
+		} else {
 			throw new \Exception('invalid arguments in render method');
 		}
+	}
 
+	function renderPartial($view = [], $vars = []) {
+		if(is_string($view)) {
+			$this->setViewPath($view);
+
+			$this->getView()->set($vars);
+
+			echo $this->getView()->renderPartial();
+		} elseif(is_array($view)) {
+			$this->getView()->set($view);
+			$this->getView()->renderPartial();
+		} else {
+			throw new \Exception('invalid arguments in renderPartial method');
+		}
 	}
 
 }
