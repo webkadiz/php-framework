@@ -1,0 +1,17 @@
+{
+    "name": "webkadiz/php-lite",
+    "description": "Lite PHP Framework",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tkachenko Vladislav",
+            "email": "webkadiz@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "pl\\": ""
+        }
+    }
+}
