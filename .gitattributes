@@ -4,3 +4,4 @@ controllers/ export-ignore
 views/ export-ignore
 composer.json export-ignore
 .gitignore export-ignore
+!*/
