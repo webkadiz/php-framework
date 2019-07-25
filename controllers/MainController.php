@@ -1,12 +1,21 @@
 <?php
 
+use pl\core\Controller;
+use pl\core\Response;
+
 class MainController extends Controller {
 
 
 
 	public function indexAction() {
-		d($this->app->request->get('text'));
+
+		$this->render('main/index', [
+			'set' => 'Hello wolrd',
+			'test' => 123,
+			'controller' => 123
+		]);
 	}
+	
 
 
 }

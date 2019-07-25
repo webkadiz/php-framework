@@ -1,5 +1,7 @@
 <?php
 
+namespace pl\core;
+
 class Session {
 	private static $sessions;
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace pl\core;
+
 class Request {
 	private static $files;
 	private static $request;

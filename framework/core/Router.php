@@ -1,5 +1,7 @@
 <?php
 
+namespace pl\core;
+
 class Router {
 
 	private static $route;
@@ -13,32 +15,35 @@ class Router {
 	
 	public static function serve() {
 		$uri = Request::getUri();
-		
-		foreach(Config::get('routes') as $pattern => $route) {
-			$pattern = self::modifyPattern($pattern);
+
+		foreach(Config::get('routes') as $likePattern => $route) {
+			$pattern = self::makePattern($likePattern);
 			
-			if(preg_match($pattern, $uri)) {
+			if(preg_match($pattern, $uri, $mathes)) {
 				if(is_string($route)) {
-					$str_params = preg_replace($pattern, $route, $uri);
-					$arr_params = explode('/', $str_params);
+					$routeParts = explode('/', $route);
 					self::$route = $route;
-					self::$alias = array_shift($arr_params);
-					self::$controller = array_shift($arr_params);
-					self::$action = array_shift($arr_params);
-					self::$layout = array_shift($arr_params);
-					self::$params = $arr_params;
-				} else d("значение ключа $pattern должно быть строкой");
+					//self::$alias = array_shift($arr_params);
+					self::$controller = array_shift($routeParts);
+					self::$action = array_shift($routeParts);
+					self::$layout = array_shift($routeParts);
+					self::$params = array_slice($mathes, 1);
+
+					if(!self::$controller) throw new \Exception('specify a controller for the pattern - ' . $likePattern);
+					if(!self::$action) throw new \Exception('specify a action for the pattern - ' . $likePattern);
+				} else {
+					throw new \Exception('value of key routes in the config property must be a string');
+				}
 				break;
 			}
 		}
 		
 	}
 	
-	public function init() {
 
-	}
+	private static function makePattern($pattern) {
+		if(!is_string($pattern)) throw new \Exception('keys in routes propery in the config must be a string');
 
-	private static function modifyPattern($pattern) {
 		return '~^'.$pattern.'$~';
 	}
 
@@ -56,7 +61,9 @@ class Router {
 	}
 	
 	public static function getControllerName() {
-		return self::getController() === Config::get('static') ? false : ucfirst(self::$controller).'Controller';
+		if(!self::$controller) return null;
+
+		return ucfirst(self::$controller).'Controller';
 	}
 
 	public static function getAction() {
@@ -64,6 +71,8 @@ class Router {
 	}
 
 	public static function getActionName() {
+		if(!self::$action) return null;
+
 		return self::$action.'Action';
 	}
 

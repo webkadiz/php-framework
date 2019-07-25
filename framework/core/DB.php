@@ -1,5 +1,9 @@
 <?php
 
+namespace pl\core;
+
+use PDO;
+
 class DB
 {
 	private static $connection;
@@ -7,15 +11,22 @@ class DB
 
 	static function connect()
 	{
-		if ($db = Config::get('db')) {
+		$dsn = Config::get('db.dsn');
+		$user = Config::get('db.user');
+		$pass = Config::get('db.pass');
 
-			$opt = [
-				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_EMULATE_PREPARES => false
-			];
 
-			self::$connection = new PDO("{$db['dbserver']}:host={$db['host']};dbname={$db['dbname']};charset={$db['charset']}", $db['user'], $db['password'], $opt);
+		$opt = [
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_EMULATE_PREPARES => false
+		];
+
+		try {
+			self::$connection = new PDO($dsn, $user, $pass, $opt);
+		} catch(\Exception $e) {
+			throw new \Exception('failed connect to database: propably incorrect dsn or user or pass property in the config');
 		}
+		
 	}
 
 	static function query($sql, $placeholders = [], $mode = PDO::FETCH_BOTH)

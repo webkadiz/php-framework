@@ -1,10 +1,10 @@
 <?php
 
+namespace pl\core;
+
 class Response {
 
 
-	static function init() {
-	}
 
 	static function send($content = null) {
 		Session::extract();

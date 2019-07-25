@@ -1,61 +1,33 @@
 <?php
 
-class View {
-	private static $view_path;
-	private static $layouts_path;
-	private static $app;
-	private static $vars;
+namespace pl\core;
 
+use pl\exceptions\FileException;
 
-	static function init() {
+class View extends PL {
 
+	protected $controller;
+
+	function __construct($controller) {		
+		$this->controller = $controller;
 	}
 
-	static function set($key, $value = null) {
+	function __get($name) {
+		dump($name);
+	}
+
+
+	function set($key, $value = null) {
 		if(is_array($key)) {
-			foreach($key as $key_item => $value_item) {
-				self::$vars[$key_item] = $value_item;
+			foreach($key as $keyItem => $valueItem) {
+				if(!$this->inClassProps($keyItem))
+					$this->$keyItem = $valueItem;
 			}
 			return;
 		}
 
-		self::$vars[$key] = $value;
-	}
-
-	static function setViewPath() {
-		$custom_view_path = null;
-
-		// ищем пользовательские пути страницы
-		foreach(Config::get('custom_paths') as $alias => $view_path) 
-			if($alias === Router::getAlias()) {
-				$custom_view_path = $view_path;
-				break;
-			}
-
-		if($custom_view_path) // если пользователь установил путь до страницы, то испольуем
-			self::$view_path = VIEWS_DIR.$custom_view_path.'.php';
-		elseif (!Router::getControllerName()) // если страница статичная
-			self::$view_path = STATIC_DIR.Router::getAction().'.php';
-		else // путь, который формирует фреймворк
-			self::$view_path = VIEWS_DIR.Router::getController().'/'. 			Router::getAction().'.php';
-		
-	}
-
-	static function setLayoutPath() {
-		$custom_layout_path = null;
-
-		// ищем пользовательские пути макета
-		foreach(Config::get('custom_paths') as $layout_name => $layout_path)
-			if($layout_name === Router::getLayout()) { 
-				$custom_layout_path = $layout_path;
-				break;
-			}
-		
-		if($custom_layout_path) // если пользователь установил путь до макета, то испольуем
-			self::$layouts_path = LAYOUTS_DIR.Router::getLayoutPath().'.php';
-		elseif (Router::getLayout()) // путь, который формирует фреймворк, если макет существует
-		 	self::$layouts_path = LAYOUTS_DIR.Router::getLayout().'.php';		
-		
+		if(!$this->inClassProps($key))
+			$this->$key = $value;
 	}
 
 	static function setAssets($assets_name) {
@@ -96,31 +68,31 @@ class View {
 		self::set($assets_name, $assets_string);
 	}
 
-	static function render() {
+	function render() {
 
-		self::setViewPath();
-		self::setLayoutPath();
-		self::setAssets('css');
-		self::setAssets('js');
+		// self::setViewPath();
+		// self::setLayoutPath();
+		// self::setAssets('css');
+		// self::setAssets('js');
 
+		$view = $this->controller->getViewPath();
+		$layout = $this->controller->getLayoutPath();
 
-		extract(self::$vars);
+		if(!is_file($layout)) throw new FileException($layout);
+		if(!is_file($view)) throw new FileException($view);
+		
 		ob_start();
+		require_once $view;
+		$content = ob_get_clean();
 
-		if(self::$layouts_path) {
-			require_once self::$view_path;
-			$content = ob_get_contents();
-			ob_clean();
-			
-			require_once self::$layouts_path;
-			$output = ob_get_contents();
-		} else {
-			require_once self::$view_path;
-			$output = ob_get_contents();
-			ob_end_clean();
-		}
+		
+		ob_start();
+		require_once $layout;
+		$page = ob_get_clean();
 
-		return $output;
+
+
+		return $page;
 
 	}
 }

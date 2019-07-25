@@ -1,8 +1,11 @@
 <?php
 
 
-define('FRAMEWORK_DIR', __DIR__ . '/framework/');
-require FRAMEWORK_DIR . 'bootstrap.php';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../framework/bootstrap.php';
+
+
+
 
 
 // Config::set('routes', [
@@ -52,5 +55,4 @@ require FRAMEWORK_DIR . 'bootstrap.php';
 // ]);
 
 
-$app = new App();
-$app->run();
+(new pl\core\App())->run();
