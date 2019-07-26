@@ -2,6 +2,6 @@ web/ export-ignore
 config/ export-ignore
 controllers/ export-ignore
 views/ export-ignore
-composer.json export-ignore
-.gitignore export-ignore
-!*/
+/composer.json export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
