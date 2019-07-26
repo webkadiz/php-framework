@@ -1,6 +1,13 @@
 {
     "name": "webkadiz/php-lite",
-    "description": "Simple php framework",
+    "description": "Lite PHP Framework",
+    "keywords": [
+        "php",
+        "framework",
+        "lite",
+        "php lite",
+        "php framework"
+    ],
     "type": "library",
     "authors": [
         {
