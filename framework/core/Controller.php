@@ -37,6 +37,7 @@ class Controller {
 	
 	function __construct(){
 		$this->view = new View($this);
+		$this->response = new Response($this);
 		$this->setViewPath(Router::getController() . '/' . Router::getAction());
 	}
 	
@@ -51,6 +52,10 @@ class Controller {
 			throw new \Exception("you must create $action in " . get_class($this) . " for " . Router::getRoute() . ' route');
 		}
 
+	}
+
+	function getResponse() {
+		return $this->response;
 	}
 
 	function getLayoutDir() {
@@ -95,14 +100,23 @@ class Controller {
 
 	function render($view = [], $vars = []) {
 		if(is_string($view)) {
+
 			$this->setViewPath($view);
 
-			$this->getView()->set($vars);
+			$this->view->set($vars);
 
-			echo $this->getView()->render();
+			$page = $this->view->render();
+
+			$this->response->send($page);
+
 		} elseif(is_array($view)) {
-			$this->getView()->set($view);
-			$this->getView()->render();
+
+			$this->view->set($view);
+
+			$page = $this->view->render();
+
+			$this->response->send($page);
+
 		} else {
 			throw new \Exception('invalid arguments in render method');
 		}
@@ -112,15 +126,30 @@ class Controller {
 		if(is_string($view)) {
 			$this->setViewPath($view);
 
-			$this->getView()->set($vars);
+			$this->view->set($vars);
 
-			echo $this->getView()->renderPartial();
+			$page = $this->view->renderPartial();
+
+			$this->response->send($page);
+
 		} elseif(is_array($view)) {
-			$this->getView()->set($view);
-			$this->getView()->renderPartial();
+			$this->view->set($view);
+
+			$page = $this->view->renderPartial();
+
+			$this->response->send($page);
+
 		} else {
 			throw new \Exception('invalid arguments in renderPartial method');
 		}
+	}
+
+	function send($content) {
+		$this->response->send($content);
+	}
+
+	function sendJSON($json) {
+		$this->response->sendJSON($json);
 	}
 
 }

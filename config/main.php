@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'routes' => ['main' => 'main/index']
+    'routes' => ['' => 'main/index']
 ];

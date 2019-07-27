@@ -81,16 +81,12 @@ class View extends PL {
 		ob_start();
 		require_once $view;
 		$content = ob_get_clean();
-
-		
+	
 		ob_start();
 		require_once $layout;
 		$page = ob_get_clean();
 
-
-
 		return $page;
-
 	}
 
 	function renderPartial() {

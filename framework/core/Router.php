@@ -29,8 +29,8 @@ class Router {
 					self::$layout = array_shift($routeParts);
 					self::$params = array_slice($mathes, 1);
 
-					if(!self::$controller) throw new \Exception('specify a controller for the pattern - ' . $likePattern);
-					if(!self::$action) throw new \Exception('specify a action for the pattern - ' . $likePattern);
+					if(!self::$controller) throw new \Exception('specify a controller for the pattern - "' . $likePattern . '"');
+					if(!self::$action) throw new \Exception('specify a action for the pattern - "' . $likePattern . '"');
 				} else {
 					throw new \Exception('value of key routes in the config property must be a string');
 				}

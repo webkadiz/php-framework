@@ -4,39 +4,20 @@ namespace pl\core;
 
 class Response {
 
-
-
-	static function send($content = null) {
-		Session::extract();
-
+	function send($content = null) {
 		echo $content;
 	}
 
-	static function render($vars = null) {
-		if($vars !== null) {
-			if(is_array($vars)) {
-				foreach($vars as $key => $value) {
-					View::set($key, $value);
-				}
-			}
-			else {
-				d('первый аргумент функции response render должен быть массив');
-			}
-		}
+	function sendJSON($json) {
+		$resultJSON = json_encode($json);
 
-		self::send(View::render());
-	}
-
-	static function sendJSON($json) {
-		$result_json = json_encode($json);
-
-		if(!$result_json) {
-			$result_json = json_encode([
+		if(!$resultJSON) {
+			$resultJSON = json_encode([
 				'error' => true,
 				'error_message' => 'не получилось закодировать данные в json'
 			]);
 		}
 
-		self::send($result_json);
+		$this->send($resultJSON);
 	}
 }
