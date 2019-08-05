@@ -40,7 +40,7 @@ class Util {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
-    function strtocamel($str) {
+    static function strtocamel($str) {
 	    $strParts = explode('_', $str);
 	    $resStr = array_shift($strParts);
 
@@ -51,7 +51,7 @@ class Util {
 	    return $resStr;
     }
 
-    function strtounder($str) {
+    static function strtounder($str) {
 	    $strChars = str_split($str);
 
 	    $index = 0;
