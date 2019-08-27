@@ -14,7 +14,7 @@ defined("PL_CONFIG_DIR") or define("PL_CONFIG_DIR", PL_BASE_DIR . '/config/');
 
 defined("PL_LOG_DIR") or define("PL_LOG_DIR", PL_BASE_DIR . '/log/');
 
-defined("RESPONSE_ERROR_AS_JSON", true);
+defined("RESPONSE_ERROR_AS_JSON") or define("RESPONSE_ERROR_AS_JSON", true);
 
 if(PL_DEV) {
 	error_reporting(E_ALL);
