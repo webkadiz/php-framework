@@ -14,16 +14,18 @@ defined("PL_CONFIG_DIR") or define("PL_CONFIG_DIR", PL_BASE_DIR . '/config/');
 
 defined("PL_LOG_DIR") or define("PL_LOG_DIR", PL_BASE_DIR . '/log/');
 
+defined("RESPONSE_ERROR_AS_JSON", true);
+
 if(PL_DEV) {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 }
 
-
 set_exception_handler(function($e) {
 
 	$output = '';
 	$message = '';
+	$code = $e->getCode();
 	$line = $e->getLine();
 	$file = $e->getFile();
 	$trace = $e->getTraceAsString();
@@ -37,14 +39,32 @@ set_exception_handler(function($e) {
 
 	if(PL_DEV) {
 		$output .= '<pre>';
-		$output .= '<b>Error</b>: '. $message .', <b>Line of error: ' . $file . ' ' . $line . "</b>\n\n";
+		$output .= '<b>' . get_class($e) . '</b>: '. $message .', <b>Line of error: ' . $file . ' ' . $line . "</b>\n\n";
 		$output .= $trace;
 		$output .= '</pre>';
-
-		echo $output;
+		
+		if(RESPONSE_ERROR_AS_JSON) {
+			pl\util\Util::sendJson([
+				'error' => [
+					'message' => $message,
+					'code' => $code,
+					'file' => $file,
+					'line' => $line,
+					'trace' => $trace
+				]
+			]);
+		} else {
+			echo $output;
+		}
 	} else {
-		$output =  'Error: '. $message .', Line of error: ' . $file . ' ' . $line;
+		$output = get_class($e) . ': '. $message .', Line of error: ' . $file . ' ' . $line;
 		pl\core\Logger::log($output);
+		pl\util\Util::sendJson([
+			'error' => [
+				'message' => $message,
+				'code' => $code,
+			]
+		]);
 	}
 });
 
@@ -52,10 +72,6 @@ set_exception_handler(function($e) {
 set_error_handler(function($code, $message, $file, $line) {
 	throw new ErrorException($message, $code, E_ERROR, $file, $line);
 });
-
-foreach (glob(__DIR__.'/modules/*.module.php') as $path) {
-	require $path;
-}
 
 
 

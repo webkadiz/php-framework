@@ -12,11 +12,6 @@ class View extends PL {
 		$this->controller = $controller;
 	}
 
-	function __get($name) {
-		dump($name);
-	}
-
-
 	function set($key, $value = null) {
 		if(is_array($key)) {
 			foreach($key as $keyItem => $valueItem) {
@@ -38,7 +33,7 @@ class View extends PL {
 		
 		if(array_key_exists('permament', $assets_config)) // подключаем файлы, которые загружаются на каждой странице
 			if(!is_array($assets_config['permament']))
-				d('ключ permament должен быть массивом строк путей до js файлов, которые будут загружаться на каждой странице');
+				throw new \Exception('ключ permament должен быть массивом строк путей до js файлов, которые будут загружаться на каждой странице');
 			else foreach($assets_config['permament'] as $file) 
 				$assets[] = $file;
 		
@@ -46,7 +41,7 @@ class View extends PL {
 		foreach($assets_config as $layout => $files) // подключаем файлы, которые загружаются на каждой странице макета
 			if($layout === Router::getLayout())
 				if(!is_array($files))
-					d("ключ {Router::getLayout()} должен быть массивом строк путей до js файлов, которые будут загружаться на каждой странице макета");
+					throw new \Exception("ключ {Router::getLayout()} должен быть массивом строк путей до js файлов, которые будут загружаться на каждой странице макета");
 				else foreach($files as $file) $assets[] = $file;
 			
 				
@@ -54,7 +49,7 @@ class View extends PL {
 		foreach($assets_config as $alias => $files) // подключаем файлы, которые загружаются только на одной странице
 			if($alias === Router::getAlias())
 				if(!is_array($files))
-					d("ключ {Router::getAlias()} должен быть массивом строк путей до js файлов, которые будут загружаться только на одной странице");
+					throw new \Exception("ключ {Router::getAlias()} должен быть массивом строк путей до js файлов, которые будут загружаться только на одной странице");
 				else foreach($files as $file) $assets[] = $file;
 			
 				

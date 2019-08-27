@@ -66,4 +66,17 @@ class Util {
 	    return $str;
     }
 
+    static function sendJson($json) {
+		$resultJSON = json_encode($json);
+
+		if(!$resultJSON) {
+			$resultJSON = json_encode([
+				'error' => true,
+				'error_message' => 'не получилось закодировать данные в json'
+			]);
+		}
+
+		echo $resultJSON;
+	}
+
 }

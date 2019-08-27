@@ -15,7 +15,7 @@ class Request {
 
 	static function get($name) {
 		if(!is_string($name)) {
-			d("параметр должен $name быть строкой");
+			throw new \Exception("параметр должен $name быть строкой");
 			return false;
 		}
 
@@ -26,7 +26,7 @@ class Request {
 
 	static function getJSON($name) {
 		if(!is_string($name)) {
-			d("параметр должен $name быть строкой");
+			throw new \Exception("параметр должен $name быть строкой");
 			return false;
 		}
 
@@ -37,7 +37,7 @@ class Request {
 
 	static function getFile($name) {
 		if(!is_string($name)) {
-			d("параметр должен $name быть строкой");
+			throw new \Exception("параметр должен $name быть строкой");
 			return false;
 		}
 
@@ -48,7 +48,7 @@ class Request {
 
 	static function getServer($name) {
 		if(!is_string($name)) {
-			d("параметр должен $name быть строкой");
+			throw new \Exception("параметр должен $name быть строкой");
 			return false;
 		}
 
