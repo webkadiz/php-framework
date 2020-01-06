@@ -10,10 +10,10 @@ class Logger {
 		FILE_APPEND);
 	}
 
-	static function logVarDump($var) {
+	static function logVarDump(...$vars) {
 
 		ob_start();
-		var_dump($var);
+		foreach($vars as $var) var_dump($var);
 		$varDump = ob_get_clean();
 
 		self::log($varDump);
