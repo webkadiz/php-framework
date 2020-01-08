@@ -24,13 +24,13 @@ class Controller {
 					self::$isRun = true;
 					$controller->runAction();
 				} else {
-					throw new \Exception('controller file exists but controller class ' .  $controllerName . ' not available for ' . Router::getRoute() . ' route');
+					throw new \Exception(EM::ControllerMethodNotExists());
 				}
 			} else {
-				throw new \Exception('controller file ' . $controllerPath. ' not exists for ' . Router::getRoute() . ' route');
+				throw new \Exception(EM::ControllerFileNotExists());
 			}
 		} else {
-			throw new \Exception('no one routes matches');
+			throw new \Exception(EM::ControllerUndefined());
 		}
 		
 	}

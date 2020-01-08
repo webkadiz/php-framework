@@ -16,30 +16,33 @@ class Router {
 	public static function serve() {
 		$uri = Request::getUri();
 
-		foreach(Config::get('routes') as $likePattern => $route) {
-			$pattern = self::makePattern($likePattern);
+		foreach(Config::get('routes') as $likeUriPattern => $route) {
+			$pattern = self::makePattern($likeUriPattern);
 			
 			if(preg_match($pattern, $uri, $mathes)) {
 				if(is_string($route)) {
 					$routeParts = explode('/', $route);
 					self::$route = $route;
-					//self::$alias = array_shift($arr_params);
 					self::$controller = array_shift($routeParts);
 					self::$action = array_shift($routeParts);
 					self::$layout = array_shift($routeParts);
 					self::$params = array_slice($mathes, 1);
 
-					if(!self::$controller) throw new \Exception('specify a controller for the pattern - "' . $likePattern . '"');
-					if(!self::$action) throw new \Exception('specify a action for the pattern - "' . $likePattern . '"');
+					if(!self::$controller) 
+						throw new \Exception(EM::ControllerNotExistsForUrl($pattern));
+
+					if(!self::$action) 
+						throw new \Exception(EM::ActionNotExistsForUrl($pattern));
 				} else {
-					throw new \Exception('value of key routes in the config property must be a string');
+					throw new \Exception(EM::RouteConfigValueMustString());
 				}
 				break;
 			}
 		}
 		
 	}
-	
+
+
 
 	private static function makePattern($pattern) {
 		if(!is_string($pattern)) throw new \Exception('keys in routes propery in the config must be a string');
